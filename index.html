@@ -1002,9 +1002,13 @@ function addCustomGen() {
   renderSelectedGens();
 }
 function renderSelectedGens() {
-  document.getElementById('gen-selected').innerHTML = selectedGens.map(g =>
-    `<span class="gen-pill selected" style="font-size:10px">${escapeHtml(g)} <span class="gen-pill-remove" onclick="removeGen('${g}')">×</span></span>`
+  const genContainer = document.getElementById('gen-selected');
+  genContainer.innerHTML = selectedGens.map(g =>
+    `<span class="gen-pill selected" style="font-size:10px" data-gen-name="${escapeHtml(g)}">${escapeHtml(g)} <span class="gen-pill-remove">×</span></span>`
   ).join('');
+  genContainer.querySelectorAll('[data-gen-name]').forEach(el => {
+    el.querySelector('.gen-pill-remove').addEventListener('click', () => removeGen(el.dataset.genName));
+  });
 }
 function removeGen(name) {
   selectedGens = selectedGens.filter(g => g !== name);
@@ -1039,11 +1043,17 @@ function renderPreviews(type) {
   const container = document.getElementById(type + '-preview');
   container.innerHTML = files.map((f, i) => {
     const url = URL.createObjectURL(f);
-    return `<div class="preview-item">
+    return `<div class="preview-item" data-preview-index="${i}">
       <img src="${url}" alt="">
-      <button class="preview-remove" onclick="removeFile('${type}',${i})">×</button>
+      <button class="preview-remove">×</button>
     </div>`;
   }).join('');
+  container.querySelectorAll('.preview-remove').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.closest('[data-preview-index]').dataset.previewIndex);
+      removeFile(type, idx);
+    });
+  });
 }
 function removeFile(type, index) {
   if (type === 'orig') origFiles.splice(index, 1);
