@@ -826,11 +826,11 @@ function renderGrid(prompts) {
   grid.innerHTML = prompts.map((p, i) => {
     const thumb = getFirstImage(p);
     const gens = (p.generators || '').split(',').filter(Boolean);
-    return `<div class="prompt-card" onclick="openDetail('${p.id}')">
+    return `<div class="prompt-card" data-id="${p.id}">
       <div class="card-thumb">
-        ${thumb ? `<img src="${thumb}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<span class=card-thumb-placeholder>NO PREVIEW</span>'">` : '<span class="card-thumb-placeholder">NO IMAGE</span>'}
+        ${thumb ? `<img src="${thumb}" alt="" loading="lazy" data-fallback="1">` : '<span class="card-thumb-placeholder">NO IMAGE</span>'}
       </div>
-      <button class="card-del" onclick="deletePrompt('${p.id}');event.stopPropagation()">✕</button>
+      <button class="card-del" data-del="${p.id}">✕</button>
       <div class="card-body">
         <div class="card-num">#${String(p.number || (i+1)).padStart(3,'0')} · ${p.date || '—'}</div>
         <div class="card-title">${escapeHtml(p.name || 'Untitled')}</div>
@@ -843,6 +843,13 @@ function renderGrid(prompts) {
       </div>
     </div>`;
   }).join('');
+  // Attach fallback + click handlers after render
+  grid.querySelectorAll('img[data-fallback]').forEach(img => {
+    img.addEventListener('error', function() {
+      const thumb = this.closest('.card-thumb');
+      if (thumb) { const s = document.createElement('span'); s.className='card-thumb-placeholder'; s.textContent='NO PREVIEW'; thumb.innerHTML=''; thumb.appendChild(s); }
+    });
+  });
 }
 
 function getFirstImage(p) {
@@ -881,28 +888,44 @@ function openDetail(id) {
     <div class="modal-section">
       <div class="modal-label">PROMPT</div>
       <div class="modal-prompt-text">${escapeHtml(p.prompt || '')}</div>
-      <button class="btn copy-btn" onclick="copyPrompt('${id}')">COPY PROMPT</button>
+      <button class="btn copy-btn" data-copy="${id}">COPY PROMPT</button>
     </div>`;
 
+  const allImgs = [...results.map(u => ({url:u,type:'result'})), ...origs.map(u => ({url:u,type:'original'}))];
   if (origs.length || results.length) {
     html += `<div class="modal-section"><div class="modal-label">IMAGES</div>`;
-    const allImgs = [...results.map(u => ({url:u,type:'result'})), ...origs.map(u => ({url:u,type:'original'}))];
     if (origs.length) {
       html += `<div class="img-group"><div class="img-group-label">Originals (${origs.length})</div>
         <div class="img-grid">${origs.map((url, i) =>
-          `<img src="${url}" loading="lazy" onclick="openLightbox(${JSON.stringify(allImgs)},${results.length + i})" onerror="this.style.display='none'">`
+          `<img src="${url}" loading="lazy" data-lb-index="${results.length + i}">`
         ).join('')}</div></div>`;
     }
     if (results.length) {
       html += `<div class="img-group"><div class="img-group-label">Results (${results.length})</div>
         <div class="img-grid">${results.map((url, i) =>
-          `<img src="${url}" loading="lazy" onclick="openLightbox(${JSON.stringify(allImgs)},${i})" onerror="this.style.display='none'">`
+          `<img src="${url}" loading="lazy" data-lb-index="${i}">`
         ).join('')}</div></div>`;
     }
     html += `</div>`;
   }
 
   document.getElementById('detail-content').innerHTML = html;
+
+  // Store allImgs for lightbox access
+  document.getElementById('detail-content').dataset.allImgs = JSON.stringify(allImgs);
+
+  // Attach handlers after render
+  document.querySelectorAll('[data-copy]').forEach(btn => {
+    btn.addEventListener('click', () => copyPrompt(btn.dataset.copy));
+  });
+  document.querySelectorAll('#detail-content img[data-lb-index]').forEach(img => {
+    img.addEventListener('click', () => {
+      const imgs = JSON.parse(document.getElementById('detail-content').dataset.allImgs || '[]');
+      openLightbox(imgs, parseInt(img.dataset.lbIndex));
+    });
+    img.addEventListener('error', function() { this.style.display='none'; });
+  });
+
   document.getElementById('detail-modal').classList.add('open');
 }
 
@@ -1118,6 +1141,16 @@ async function deletePrompt(id) {
 function escapeHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+
+// Event delegation for prompt grid
+document.getElementById('prompt-grid').addEventListener('click', function(e) {
+  // Delete button
+  const delBtn = e.target.closest('[data-del]');
+  if (delBtn) { e.stopPropagation(); deletePrompt(delBtn.dataset.del); return; }
+  // Card click -> open detail
+  const card = e.target.closest('.prompt-card[data-id]');
+  if (card) openDetail(card.dataset.id);
+});
 
 // Close modals on overlay click
 document.getElementById('detail-modal').addEventListener('click', function(e) {
