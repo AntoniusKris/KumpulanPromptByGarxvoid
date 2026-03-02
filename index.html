@@ -790,7 +790,7 @@ async function loadData() {
   }
   document.getElementById('config-notice').style.display = 'none';
   try {
-    const res = await fetch(SCRIPT_URL + '?action=getAll');
+    const res = await fetch(SCRIPT_URL + '?action=getAll', { redirect: 'follow' });
     const data = await res.json();
     allPrompts = data.prompts || [];
     filteredPrompts = [...allPrompts];
@@ -1073,6 +1073,7 @@ async function submitPrompt() {
 
     const response = await fetch(SCRIPT_URL, {
       method: 'POST',
+      redirect: 'follow',
       body: JSON.stringify(payload)
     });
     const result = await response.json();
@@ -1098,6 +1099,7 @@ async function deletePrompt(id) {
   try {
     const response = await fetch(SCRIPT_URL, {
       method: 'POST',
+      redirect: 'follow',
       body: JSON.stringify({ action: 'deletePrompt', id })
     });
     const result = await response.json();
