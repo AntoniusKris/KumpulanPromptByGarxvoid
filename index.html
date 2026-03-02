@@ -782,24 +782,34 @@ function toast(msg, type = '') {
 }
 
 // ===== LOAD DATA =====
-async function loadData() {
+function loadData() {
   if (!SCRIPT_URL || SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
     document.getElementById('loading-state').style.display = 'none';
     updateStats([]);
     return;
   }
   document.getElementById('config-notice').style.display = 'none';
-  try {
-    const res = await fetch(SCRIPT_URL + '?action=getAll', { redirect: 'follow' });
-    const data = await res.json();
+  // Use JSONP to avoid CORS/CSP issues with Google Apps Script redirects
+  const callbackName = 'gascb_' + Date.now();
+  const script = document.createElement('script');
+  const timeout = setTimeout(() => {
+    script.remove();
+    delete window[callbackName];
+    document.getElementById('loading-state').innerHTML = '<div style="color:var(--accent2)">⚠ Failed to load. Check your Script URL.</div>';
+  }, 15000);
+
+  window[callbackName] = function(data) {
+    clearTimeout(timeout);
+    script.remove();
+    delete window[callbackName];
     allPrompts = data.prompts || [];
     filteredPrompts = [...allPrompts];
     renderGrid(filteredPrompts);
     updateStats(allPrompts);
-  } catch(e) {
-    document.getElementById('loading-state').innerHTML = '<div style="color:var(--accent2)">⚠ Failed to load. Check your Script URL.</div>';
-    console.error(e);
-  }
+  };
+
+  script.src = SCRIPT_URL + '?action=getAll&callback=' + callbackName;
+  document.head.appendChild(script);
 }
 
 function updateStats(prompts) {
