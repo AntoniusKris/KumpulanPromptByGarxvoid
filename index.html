@@ -1,1178 +1,1260 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kumpulan Prompt — GARXVOID</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KUMPULAN PROMPT — GARXVOID</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
-:root {
-  --bg: #0a0a0a;
-  --surface: #111111;
-  --surface2: #1a1a1a;
-  --border: #2a2a2a;
-  --accent: #e8ff3c;
-  --accent2: #ff3c6e;
-  --text: #f0f0f0;
-  --muted: #555;
-  --muted2: #888;
+/* ===== RESET & BASE ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --black:#000;--white:#fff;--gray:#888;--lgray:#ccc;--dgray:#1a1a1a;
+  --accent:#fff;--red:#ff2020;
+  --font-display:'Bebas Neue',sans-serif;
+  --font-mono:'Space Mono',monospace;
+  --font-body:'DM Mono',monospace;
+  --border:1px solid #fff;
+  --border-dim:1px solid #333;
 }
+html{scroll-behavior:smooth;}
+body{
+  background:#000;color:#fff;
+  font-family:var(--font-body);
+  overflow-x:hidden;
+  cursor:crosshair;
+}
+::selection{background:#fff;color:#000;}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:#000;}
+::-webkit-scrollbar-thumb{background:#fff;}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html, body {
-  height: 100%;
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Space Mono', monospace;
-  overflow-x: hidden;
+/* ===== HALFTONE OVERLAY ===== */
+.halftone-bg{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle,rgba(255,255,255,0.07) 1px,transparent 1px);
+  background-size:12px 12px;
+}
+.grid-overlay{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);
+  background-size:60px 60px;
 }
 
 /* ===== LANDING ===== */
-#landing {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  background: var(--bg);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.9s cubic-bezier(0.77, 0, 0.175, 1);
+#landing{
+  position:fixed;inset:0;z-index:100;
+  background:#000;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  overflow:hidden;
+  transition:none;
 }
-#landing.slide-up {
-  transform: translateY(-100%);
-  pointer-events: none;
+#landing.exiting{
+  animation:glitchWipeUp 0.85s cubic-bezier(0.77,0,0.18,1) forwards;
 }
-.landing-bg {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-}
-.landing-bg::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 80% 60% at 50% 50%, #1a1a00 0%, transparent 70%);
-}
-.grid-lines {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(var(--border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border) 1px, transparent 1px);
-  background-size: 60px 60px;
-  opacity: 0.4;
-}
-.landing-content {
-  position: relative;
-  text-align: center;
-  z-index: 1;
-}
-.landing-eyebrow {
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.3em;
-  color: var(--accent);
-  text-transform: uppercase;
-  margin-bottom: 24px;
-  opacity: 0;
-  animation: fadeUp 0.8s 0.3s forwards;
-}
-.landing-title {
-  font-family: 'Syne', sans-serif;
-  font-weight: 900;
-  font-size: clamp(48px, 10vw, 120px);
-  line-height: 0.9;
-  letter-spacing: -0.02em;
-  margin-bottom: 12px;
-  opacity: 0;
-  animation: fadeUp 0.8s 0.5s forwards;
-}
-.landing-title span { color: var(--accent); }
-.landing-sub {
-  font-family: 'Space Mono', monospace;
-  font-size: 12px;
-  color: var(--muted2);
-  letter-spacing: 0.15em;
-  margin-bottom: 60px;
-  opacity: 0;
-  animation: fadeUp 0.8s 0.7s forwards;
-}
-.enter-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  background: var(--accent);
-  color: #000;
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 14px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 16px 40px;
-  border: none;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  opacity: 0;
-  animation: fadeUp 0.8s 0.9s forwards;
-  transition: transform 0.2s;
-}
-.enter-btn:hover { transform: scale(1.04); }
-.enter-btn::after {
-  content: '→';
-  font-size: 18px;
+@keyframes glitchWipeUp{
+  0%{transform:translateY(0);clip-path:inset(0 0 0 0);}
+  15%{transform:translateY(-2px) skewX(-1deg);clip-path:inset(0 0 0 0);}
+  20%{transform:translateY(0) skewX(2deg);clip-path:inset(5% 0 0 0);}
+  35%{transform:translateY(-4px) skewX(-0.5deg);clip-path:inset(15% 0 0 0);}
+  40%{transform:translateY(2px);clip-path:inset(14% 2% 0 2%);}
+  55%{transform:translateY(-8px);clip-path:inset(40% 0 0 0);}
+  60%{clip-path:inset(39% 3% 0 0);}
+  75%{transform:translateY(-20px);clip-path:inset(70% 0 0 0);}
+  100%{transform:translateY(-110vh);clip-path:inset(100% 0 0 0);opacity:0;}
 }
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Scanlines on landing */
+#landing::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.015) 2px,rgba(255,255,255,0.015) 4px);
+  pointer-events:none;z-index:1;
 }
+
+.landing-noise{
+  position:absolute;inset:0;
+  opacity:0.04;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:150px 150px;
+  pointer-events:none;
+}
+
+.landing-grid-lines{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.06) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+
+.landing-content{position:relative;z-index:2;text-align:center;padding:2rem;}
+
+.landing-eyebrow{
+  font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.4em;
+  color:#555;text-transform:uppercase;margin-bottom:1.5rem;
+  animation:fadeInDown 1s ease 0.3s both;
+}
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+
+.landing-title{
+  font-family:var(--font-display);
+  font-size:clamp(4rem,14vw,11rem);
+  line-height:0.88;
+  letter-spacing:0.02em;
+  color:#fff;
+  margin-bottom:0.2em;
+  animation:glitchReveal 1.2s ease 0.1s both;
+  position:relative;
+}
+.landing-title::before,.landing-title::after{
+  content:attr(data-text);
+  position:absolute;left:0;top:0;width:100%;
+}
+.landing-title::before{
+  color:#ff2020;clip-path:inset(20% 0 60% 0);
+  animation:glitchSlice1 3s infinite;
+  transform:translateX(-3px);
+}
+.landing-title::after{
+  color:#00ffff;clip-path:inset(60% 0 10% 0);
+  animation:glitchSlice2 3s infinite 0.5s;
+  transform:translateX(3px);
+}
+@keyframes glitchSlice1{
+  0%,94%,100%{opacity:0;}95%{opacity:1;transform:translateX(-5px) skewX(-3deg);}97%{opacity:0;}
+}
+@keyframes glitchSlice2{
+  0%,91%,100%{opacity:0;}92%{opacity:1;transform:translateX(5px);}94%{opacity:0;}
+}
+@keyframes glitchReveal{
+  0%{opacity:0;transform:skewX(5deg) translateY(20px);}
+  60%{opacity:1;}
+  100%{opacity:1;transform:skewX(0) translateY(0);}
+}
+
+.landing-sub{
+  font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.25em;
+  color:#444;text-transform:uppercase;margin-bottom:4rem;
+  animation:fadeInDown 1s ease 0.6s both;
+}
+
+.landing-divider{
+  width:1px;height:60px;background:#fff;margin:0 auto 3rem;
+  animation:growLine 1s ease 0.8s both;
+}
+@keyframes growLine{from{height:0;opacity:0;}to{height:60px;opacity:1;}}
+
+.btn-enter{
+  font-family:var(--font-mono);font-size:0.75rem;letter-spacing:0.3em;
+  text-transform:uppercase;color:#000;background:#fff;
+  border:none;padding:1rem 3rem;cursor:crosshair;
+  position:relative;overflow:hidden;
+  animation:fadeInUp 1s ease 1s both;
+  transition:all 0.2s;
+}
+.btn-enter::before{
+  content:'';position:absolute;inset:0;background:#000;
+  transform:translateX(-101%);transition:transform 0.3s cubic-bezier(0.77,0,0.18,1);
+}
+.btn-enter:hover{color:#fff;}
+.btn-enter:hover::before{transform:translateX(0);}
+.btn-enter span{position:relative;z-index:1;}
+.btn-enter:active{transform:scale(0.97);}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(15px);}to{opacity:1;transform:translateY(0);}}
+
+.landing-corner{
+  position:absolute;font-family:var(--font-mono);font-size:0.55rem;
+  color:#333;letter-spacing:0.15em;
+}
+.corner-tl{top:2rem;left:2rem;}
+.corner-tr{top:2rem;right:2rem;text-align:right;}
+.corner-bl{bottom:2rem;left:2rem;}
+.corner-br{bottom:2rem;right:2rem;text-align:right;}
 
 /* ===== MAIN APP ===== */
-#app {
-  min-height: 100vh;
-  opacity: 0;
-  transition: opacity 0.6s 0.5s;
+#app{
+  position:relative;z-index:1;
+  min-height:100vh;
+  opacity:0;
+  transition:opacity 0.5s ease 0.4s;
 }
-#app.visible { opacity: 1; }
+#app.visible{opacity:1;}
 
-header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: rgba(10,10,10,0.95);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 32px;
-  height: 60px;
+/* ===== HEADER ===== */
+.app-header{
+  border-bottom:var(--border);
+  display:grid;grid-template-columns:1fr auto 1fr;
+  align-items:center;padding:1.2rem 2rem;
+  position:sticky;top:0;z-index:50;
+  background:#000;
 }
-.header-brand {
-  font-family: 'Syne', sans-serif;
-  font-weight: 900;
-  font-size: 15px;
-  letter-spacing: 0.05em;
+.header-left{
+  font-family:var(--font-mono);font-size:0.6rem;
+  letter-spacing:0.2em;color:#555;text-transform:uppercase;
 }
-.header-brand span { color: var(--accent); }
-.header-actions { display: flex; gap: 12px; align-items: center; }
+.header-logo{
+  font-family:var(--font-display);font-size:1.6rem;
+  letter-spacing:0.1em;color:#fff;text-align:center;
+  white-space:nowrap;
+}
+.header-logo span{color:#555;font-size:1rem;}
+.header-right{
+  display:flex;justify-content:flex-end;align-items:center;gap:1rem;
+}
+.status-dot{
+  width:6px;height:6px;border-radius:50%;background:#0f0;
+  box-shadow:0 0 6px #0f0;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.status-text{font-family:var(--font-mono);font-size:0.55rem;color:#555;letter-spacing:0.1em;}
 
-.btn {
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 8px 18px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--text);
-  cursor: pointer;
-  transition: all 0.15s;
+/* ===== TOOLBAR ===== */
+.toolbar{
+  border-bottom:var(--border-dim);
+  padding:1rem 2rem;
+  display:flex;align-items:center;gap:1rem;
+  flex-wrap:wrap;
 }
-.btn:hover { border-color: var(--accent); color: var(--accent); }
-.btn.primary { background: var(--accent); color: #000; border-color: var(--accent); }
-.btn.primary:hover { background: #f5ff70; }
-.btn.danger { border-color: var(--accent2); color: var(--accent2); }
-.btn.danger:hover { background: var(--accent2); color: #fff; }
+.search-box{
+  flex:1;min-width:200px;max-width:400px;
+  display:flex;align-items:center;gap:0.5rem;
+  border:var(--border-dim);padding:0.6rem 1rem;
+}
+.search-box input{
+  background:transparent;border:none;outline:none;
+  color:#fff;font-family:var(--font-mono);font-size:0.7rem;
+  flex:1;letter-spacing:0.05em;
+}
+.search-box input::placeholder{color:#444;}
+.search-icon{color:#555;font-size:0.8rem;}
 
-.search-bar {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  background: var(--surface);
-  border: 1px solid var(--border);
+.filter-tags{display:flex;gap:0.4rem;flex-wrap:wrap;}
+.filter-tag{
+  font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.15em;
+  text-transform:uppercase;padding:0.35rem 0.8rem;
+  border:var(--border-dim);color:#555;cursor:crosshair;
+  transition:all 0.15s;background:transparent;
 }
-.search-bar input {
-  background: transparent;
-  border: none;
-  outline: none;
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  color: var(--text);
-  padding: 8px 14px;
-  width: 220px;
-}
-.search-bar input::placeholder { color: var(--muted); }
-.search-bar span { padding: 8px 12px; color: var(--muted); font-size: 12px; }
+.filter-tag:hover,.filter-tag.active{border-color:#fff;color:#fff;}
+.filter-tag.active{background:#fff;color:#000;}
 
-/* ===== GRID ===== */
-.container { padding: 32px; }
-.stats-bar {
-  display: flex;
-  gap: 24px;
-  margin-bottom: 32px;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 20px;
+.btn-add{
+  margin-left:auto;
+  font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.2em;
+  text-transform:uppercase;color:#000;background:#fff;
+  border:none;padding:0.7rem 1.5rem;cursor:crosshair;
+  display:flex;align-items:center;gap:0.5rem;
+  transition:all 0.15s;white-space:nowrap;
 }
-.stat { display: flex; flex-direction: column; gap: 2px; }
-.stat-val { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 900; color: var(--accent); }
-.stat-label { font-size: 10px; letter-spacing: 0.15em; color: var(--muted2); text-transform: uppercase; }
+.btn-add:hover{background:#ccc;}
+.btn-add:active{transform:scale(0.97);}
 
-#loading-state {
-  text-align: center;
-  padding: 80px 20px;
-  color: var(--muted2);
-  font-size: 12px;
-  letter-spacing: 0.1em;
+/* ===== STATS BAR ===== */
+.stats-bar{
+  border-bottom:var(--border-dim);
+  padding:0.6rem 2rem;
+  display:flex;align-items:center;gap:2rem;
+  font-family:var(--font-mono);font-size:0.55rem;
+  color:#444;letter-spacing:0.1em;text-transform:uppercase;
 }
-.loader {
-  width: 32px; height: 32px;
-  border: 2px solid var(--border);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin: 0 auto 16px;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
+.stats-bar span{color:#fff;}
 
-.prompt-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px;
-}
+/* ===== DATABASE TABLE ===== */
+.db-section{padding:0 2rem 4rem;}
 
-.prompt-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  cursor: pointer;
-  transition: border-color 0.2s, transform 0.2s;
-  position: relative;
-  overflow: hidden;
+.db-table{width:100%;border-collapse:collapse;margin-top:0;}
+.db-table thead tr{border-bottom:var(--border);}
+.db-table th{
+  font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.2em;
+  text-transform:uppercase;color:#555;
+  padding:1rem 0.8rem;text-align:left;font-weight:400;
 }
-.prompt-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
-}
-.card-thumb {
-  width: 100%;
-  aspect-ratio: 16/9;
-  overflow: hidden;
-  background: var(--surface2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-.card-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s;
-}
-.prompt-card:hover .card-thumb img { transform: scale(1.05); }
-.card-thumb-placeholder {
-  font-size: 11px;
-  color: var(--muted);
-  letter-spacing: 0.1em;
-}
-.card-body { padding: 16px; }
-.card-num {
-  font-size: 10px;
-  color: var(--muted);
-  margin-bottom: 4px;
-  font-family: 'Space Mono', monospace;
-}
-.card-title {
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: 15px;
-  margin-bottom: 8px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.card-prompt-preview {
-  font-size: 11px;
-  color: var(--muted2);
-  line-height: 1.6;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  margin-bottom: 12px;
-}
-.card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.tag {
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  border: 1px solid;
-  font-weight: 700;
-}
-.tag-flow { border-color: #3cf; color: #3cf; }
-.tag-sora { border-color: #c3f; color: #c3f; }
-.tag-gemini { border-color: #3fc; color: #3fc; }
-.tag-whisk { border-color: #fc3; color: #fc3; }
-.tag-other { border-color: var(--muted); color: var(--muted2); }
-.card-date { font-size: 10px; color: var(--muted); }
-.card-del {
-  position: absolute;
-  top: 10px; right: 10px;
-  width: 26px; height: 26px;
-  background: rgba(255,60,110,0.9);
-  border: none;
-  color: #fff;
-  font-size: 14px;
-  cursor: pointer;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.15s;
-  z-index: 2;
-}
-.prompt-card:hover .card-del { display: flex; }
-.card-del:hover { background: var(--accent2); }
+.db-table th:first-child{width:60px;}
+.db-table th:nth-child(2){width:80px;}
+.db-table th:nth-child(3){width:130px;}
 
-/* ===== DETAIL MODAL ===== */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(6px);
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
+.db-table tbody tr{
+  border-bottom:var(--border-dim);
+  cursor:crosshair;
+  transition:background 0.1s;
 }
-.modal-overlay.open { display: flex; }
-.modal {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  width: 100%;
-  max-width: 900px;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+.db-table tbody tr:hover{background:rgba(255,255,255,0.03);}
+.db-table td{
+  padding:1rem 0.8rem;
+  font-family:var(--font-mono);font-size:0.65rem;
+  color:#888;vertical-align:middle;
 }
-@keyframes modalIn {
-  from { opacity: 0; transform: scale(0.95) translateY(16px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
+.td-num{color:#444;font-size:0.6rem;}
+.td-date{color:#444;font-size:0.58rem;white-space:nowrap;}
+.td-title{
+  color:#fff;font-size:0.75rem;letter-spacing:0.02em;
+  max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
-.modal-close {
-  position: sticky;
-  top: 0;
-  display: flex;
-  justify-content: flex-end;
-  padding: 16px 20px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  z-index: 1;
+.td-prompt{
+  max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font-size:0.6rem;color:#555;
 }
-.modal-close button {
-  background: none; border: none;
-  color: var(--muted2); font-size: 20px; cursor: pointer;
-  font-family: 'Space Mono', monospace;
-  transition: color 0.15s;
+.td-tools{display:flex;gap:0.3rem;flex-wrap:wrap;}
+.tool-badge{
+  font-family:var(--font-mono);font-size:0.5rem;letter-spacing:0.1em;
+  text-transform:uppercase;padding:0.2rem 0.5rem;
+  border:1px solid #333;color:#666;white-space:nowrap;
 }
-.modal-close button:hover { color: var(--accent2); }
-.modal-body { padding: 28px; }
-.modal-header { margin-bottom: 24px; }
-.modal-num { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
-.modal-title {
-  font-family: 'Syne', sans-serif;
-  font-size: 28px;
-  font-weight: 900;
-  margin-bottom: 8px;
+.tool-badge.gemini{border-color:#4285f4;color:#4285f4;}
+.tool-badge.sora{border-color:#10a37f;color:#10a37f;}
+.tool-badge.whisk{border-color:#ff6b35;color:#ff6b35;}
+.tool-badge.flow{border-color:#a855f7;color:#a855f7;}
+.tool-badge.other{border-color:#888;color:#888;}
+
+.td-images{display:flex;gap:4px;}
+.img-thumb{
+  width:32px;height:32px;object-fit:cover;
+  border:1px solid #333;filter:grayscale(40%);
 }
-.modal-meta { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-.modal-date { font-size: 11px; color: var(--muted2); }
-.modal-section { margin-bottom: 28px; }
-.modal-label {
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 10px;
-  font-weight: 700;
-}
-.modal-prompt-text {
-  font-size: 13px;
-  line-height: 1.8;
-  color: var(--text);
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  padding: 16px;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-.copy-btn {
-  margin-top: 8px;
-  font-size: 10px;
-  padding: 5px 12px;
+.img-count{
+  width:32px;height:32px;border:1px solid #333;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-mono);font-size:0.5rem;color:#555;
 }
 
-/* Image gallery in modal */
-.img-group { margin-bottom: 20px; }
-.img-group-label {
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--muted2);
-  margin-bottom: 10px;
-  border-left: 2px solid var(--accent);
-  padding-left: 8px;
+/* Empty state */
+.empty-state{
+  padding:6rem 2rem;text-align:center;
+  border-top:var(--border-dim);
 }
-.img-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 10px;
+.empty-state .es-label{
+  font-family:var(--font-display);font-size:3rem;color:#1a1a1a;
+  letter-spacing:0.1em;margin-bottom:1rem;display:block;
 }
-.img-grid img {
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-  cursor: pointer;
-  border: 1px solid var(--border);
-  transition: border-color 0.15s, transform 0.2s;
-}
-.img-grid img:hover { border-color: var(--accent); transform: scale(1.02); }
-
-/* ===== LIGHTBOX ===== */
-.lightbox {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 999;
-  background: rgba(0,0,0,0.95);
-  align-items: center;
-  justify-content: center;
-}
-.lightbox.open { display: flex; }
-.lightbox img {
-  max-width: 90vw;
-  max-height: 90vh;
-  object-fit: contain;
-  border: 1px solid var(--border);
-}
-.lightbox-close {
-  position: absolute;
-  top: 20px; right: 24px;
-  background: none; border: none;
-  color: #fff; font-size: 28px; cursor: pointer;
-  font-family: 'Space Mono', monospace;
-}
-.lb-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(255,255,255,0.07);
-  border: none; color: #fff;
-  font-size: 24px; padding: 12px 18px;
-  cursor: pointer; transition: background 0.15s;
-}
-.lb-nav:hover { background: rgba(255,255,255,0.15); }
-.lb-prev { left: 20px; }
-.lb-next { right: 20px; }
-
-/* ===== ADD MODAL ===== */
-#add-modal .modal { max-width: 700px; }
-.form-group { margin-bottom: 20px; }
-.form-label {
-  display: block;
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--muted2);
-  margin-bottom: 8px;
-  font-weight: 700;
-}
-.form-input, .form-textarea, .form-select {
-  width: 100%;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  color: var(--text);
-  font-family: 'Space Mono', monospace;
-  font-size: 12px;
-  padding: 10px 14px;
-  outline: none;
-  transition: border-color 0.15s;
-}
-.form-input:focus, .form-textarea:focus, .form-select:focus {
-  border-color: var(--accent);
-}
-.form-textarea { resize: vertical; min-height: 120px; }
-.form-select option { background: var(--surface2); }
-
-.generator-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
-.gen-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 10px;
-  padding: 4px 10px;
-  border: 1px solid var(--border);
-  cursor: pointer;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  transition: all 0.15s;
-  user-select: none;
-}
-.gen-pill.selected { background: var(--accent); color: #000; border-color: var(--accent); }
-.gen-pill-remove { font-size: 12px; line-height: 1; }
-
-.upload-zone {
-  border: 2px dashed var(--border);
-  padding: 24px;
-  text-align: center;
-  cursor: pointer;
-  transition: border-color 0.2s;
-  position: relative;
-}
-.upload-zone:hover, .upload-zone.drag-over { border-color: var(--accent); }
-.upload-zone input[type=file] {
-  position: absolute; inset: 0; opacity: 0; cursor: pointer;
-}
-.upload-zone-text { font-size: 11px; color: var(--muted2); line-height: 1.6; }
-.upload-zone-icon { font-size: 24px; margin-bottom: 8px; }
-
-.preview-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-.preview-item {
-  position: relative;
-  width: 80px; height: 80px;
-}
-.preview-item img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  border: 1px solid var(--border);
-}
-.preview-remove {
-  position: absolute;
-  top: -6px; right: -6px;
-  width: 18px; height: 18px;
-  background: var(--accent2);
-  border: none; color: #fff;
-  font-size: 10px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 50%;
+.empty-state p{
+  font-family:var(--font-mono);font-size:0.65rem;color:#444;letter-spacing:0.1em;
 }
 
-/* ===== TOAST ===== */
-.toast {
-  position: fixed;
-  bottom: 28px; right: 28px;
-  background: var(--surface);
-  border: 1px solid var(--accent);
-  color: var(--accent);
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  padding: 12px 20px;
-  z-index: 999;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.3s;
-  letter-spacing: 0.1em;
-  pointer-events: none;
+/* Loading state */
+.loading-state{
+  padding:4rem 2rem;text-align:center;
 }
-.toast.show { opacity: 1; transform: translateY(0); }
-.toast.error { border-color: var(--accent2); color: var(--accent2); }
-
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border); }
-::-webkit-scrollbar-thumb:hover { background: var(--muted); }
-
-.empty-state {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 80px 20px;
-  color: var(--muted);
-  font-size: 12px;
-  letter-spacing: 0.1em;
+.loading-bar{
+  width:200px;height:2px;background:#111;margin:0 auto 1rem;
+  overflow:hidden;
+}
+.loading-bar-inner{
+  height:100%;background:#fff;
+  animation:loadBar 1.5s ease infinite;
+}
+@keyframes loadBar{
+  0%{width:0;margin-left:0;}
+  50%{width:60%;margin-left:20%;}
+  100%{width:0;margin-left:100%;}
+}
+.loading-text{
+  font-family:var(--font-mono);font-size:0.6rem;color:#444;
+  letter-spacing:0.2em;text-transform:uppercase;
 }
 
-.config-notice {
-  background: var(--surface);
-  border: 1px solid var(--accent);
-  padding: 16px 20px;
-  margin-bottom: 24px;
-  font-size: 11px;
-  color: var(--muted2);
-  line-height: 1.7;
+/* ===== MODAL OVERLAY ===== */
+.overlay{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,0.92);
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:2rem 1rem;overflow-y:auto;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.25s;
 }
-.config-notice strong { color: var(--accent); font-family: 'Syne', sans-serif; }
-.config-notice code {
-  background: var(--surface2);
-  padding: 1px 6px;
-  color: var(--text);
-  font-family: 'Space Mono', monospace;
+.overlay.open{opacity:1;pointer-events:all;}
+
+.modal{
+  background:#000;border:var(--border);
+  width:100%;max-width:860px;
+  position:relative;
+  transform:translateY(30px);
+  transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.overlay.open .modal{transform:translateY(0);}
+
+.modal-header{
+  border-bottom:var(--border);
+  padding:1.2rem 1.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.modal-title{
+  font-family:var(--font-display);font-size:1.4rem;letter-spacing:0.05em;
+  color:#fff;
+}
+.modal-meta{
+  font-family:var(--font-mono);font-size:0.55rem;color:#444;letter-spacing:0.1em;
+}
+.btn-close{
+  background:none;border:var(--border-dim);color:#fff;
+  width:32px;height:32px;cursor:crosshair;
+  font-size:1.1rem;display:flex;align-items:center;justify-content:center;
+  transition:all 0.15s;flex-shrink:0;
+}
+.btn-close:hover{background:#fff;color:#000;border-color:#fff;}
+
+.modal-body{padding:1.5rem;}
+
+/* DETAIL modal */
+.detail-prompt-block{
+  border:var(--border-dim);padding:1rem 1.2rem;
+  margin-bottom:1.5rem;background:#050505;
+  position:relative;
+}
+.detail-prompt-label{
+  font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.2em;
+  text-transform:uppercase;color:#555;margin-bottom:0.7rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.detail-prompt-text{
+  font-family:var(--font-mono);font-size:0.7rem;color:#ccc;
+  line-height:1.7;white-space:pre-wrap;word-break:break-word;
+}
+.btn-copy{
+  font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.15em;
+  text-transform:uppercase;background:none;
+  border:var(--border-dim);color:#555;padding:0.3rem 0.8rem;
+  cursor:crosshair;transition:all 0.15s;
+}
+.btn-copy:hover{border-color:#fff;color:#fff;}
+.btn-copy.copied{border-color:#0f0;color:#0f0;}
+
+.detail-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;
+}
+.detail-section-label{
+  font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.2em;
+  text-transform:uppercase;color:#555;margin-bottom:0.8rem;
+  padding-bottom:0.5rem;border-bottom:var(--border-dim);
+}
+.detail-images{display:flex;flex-wrap:wrap;gap:0.5rem;}
+.detail-img{
+  width:80px;height:80px;object-fit:cover;
+  border:1px solid #333;filter:grayscale(20%);
+  cursor:crosshair;transition:all 0.2s;
+}
+.detail-img:hover{filter:grayscale(0);border-color:#fff;transform:scale(1.05);}
+.detail-tools-list{display:flex;flex-wrap:wrap;gap:0.5rem;}
+
+.modal-actions{
+  border-top:var(--border-dim);padding:1rem 1.5rem;
+  display:flex;gap:0.8rem;justify-content:flex-end;
+}
+.btn-edit{
+  font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;
+  text-transform:uppercase;padding:0.6rem 1.4rem;
+  border:var(--border);color:#fff;background:transparent;cursor:crosshair;
+  transition:all 0.15s;
+}
+.btn-edit:hover{background:#fff;color:#000;}
+.btn-delete{
+  font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;
+  text-transform:uppercase;padding:0.6rem 1.4rem;
+  border:1px solid #ff2020;color:#ff2020;background:transparent;cursor:crosshair;
+  transition:all 0.15s;
+}
+.btn-delete:hover{background:#ff2020;color:#000;}
+
+/* ===== ADD/EDIT FORM ===== */
+.form-row{margin-bottom:1.2rem;}
+.form-label{
+  font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.2em;
+  text-transform:uppercase;color:#555;margin-bottom:0.5rem;display:block;
+}
+.form-input,.form-textarea{
+  width:100%;background:#050505;border:var(--border-dim);
+  color:#fff;font-family:var(--font-mono);font-size:0.7rem;
+  padding:0.75rem 1rem;outline:none;
+  transition:border-color 0.15s;letter-spacing:0.03em;
+}
+.form-input:focus,.form-textarea:focus{border-color:#fff;}
+.form-input::placeholder,.form-textarea::placeholder{color:#333;}
+.form-textarea{resize:vertical;min-height:100px;line-height:1.6;}
+
+/* Tool checkboxes */
+.tool-checkboxes{display:flex;flex-wrap:wrap;gap:0.5rem;}
+.tool-checkbox{position:relative;}
+.tool-checkbox input{position:absolute;opacity:0;width:0;height:0;}
+.tool-checkbox label{
+  font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.1em;
+  text-transform:uppercase;padding:0.5rem 1rem;
+  border:var(--border-dim);color:#555;cursor:crosshair;
+  display:block;transition:all 0.15s;user-select:none;
+}
+.tool-checkbox input:checked+label{border-color:#fff;color:#fff;background:rgba(255,255,255,0.05);}
+.tool-other-input{margin-top:0.5rem;}
+
+/* Image URL fields */
+.url-fields{display:flex;flex-direction:column;gap:0.4rem;}
+.url-field-row{display:flex;gap:0.4rem;align-items:center;}
+.url-field-row .form-input{flex:1;}
+.btn-remove-url{
+  background:none;border:var(--border-dim);color:#555;
+  width:32px;height:32px;cursor:crosshair;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:1rem;
+  transition:all 0.15s;
+}
+.btn-remove-url:hover{border-color:#ff2020;color:#ff2020;}
+.btn-add-url{
+  font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.15em;
+  text-transform:uppercase;background:none;border:var(--border-dim);
+  color:#555;padding:0.4rem 0.8rem;cursor:crosshair;
+  display:inline-flex;align-items:center;gap:0.4rem;margin-top:0.3rem;
+  transition:all 0.15s;
+}
+.btn-add-url:hover{border-color:#fff;color:#fff;}
+
+.form-section-title{
+  font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.2em;
+  text-transform:uppercase;color:#444;
+  padding:0.5rem 0;border-top:var(--border-dim);margin:1.2rem 0 0;
+}
+.images-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+
+.btn-submit{
+  font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.2em;
+  text-transform:uppercase;color:#000;background:#fff;
+  border:none;padding:0.85rem 2.5rem;cursor:crosshair;
+  transition:all 0.15s;
+}
+.btn-submit:hover{background:#ccc;}
+.btn-submit:disabled{opacity:0.4;cursor:default;}
+.btn-cancel{
+  font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.2em;
+  text-transform:uppercase;color:#555;background:transparent;
+  border:var(--border-dim);padding:0.85rem 1.5rem;cursor:crosshair;
+  transition:all 0.15s;
+}
+.btn-cancel:hover{border-color:#fff;color:#fff;}
+
+/* Confirm delete */
+.confirm-msg{
+  font-family:var(--font-mono);font-size:0.7rem;color:#ccc;
+  line-height:1.8;margin-bottom:1.5rem;
+}
+.confirm-msg strong{color:#ff2020;}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:2rem;right:2rem;z-index:300;
+  font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.1em;
+  padding:0.8rem 1.5rem;border:var(--border);
+  background:#000;color:#fff;
+  transform:translateY(20px);opacity:0;
+  transition:all 0.25s;pointer-events:none;
+}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:#0f0;color:#0f0;}
+.toast.error{border-color:#ff2020;color:#ff2020;}
+
+/* Lightbox */
+.lightbox{
+  position:fixed;inset:0;z-index:400;
+  background:rgba(0,0,0,0.97);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity 0.2s;
+}
+.lightbox.open{opacity:1;pointer-events:all;}
+.lightbox img{max-width:90vw;max-height:90vh;object-fit:contain;}
+.lightbox-close{
+  position:absolute;top:1.5rem;right:1.5rem;
+  background:none;border:var(--border);color:#fff;
+  width:40px;height:40px;font-size:1.2rem;cursor:crosshair;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:700px){
+  .app-header{grid-template-columns:1fr auto;}
+  .header-left{display:none;}
+  .detail-grid{grid-template-columns:1fr;}
+  .images-grid{grid-template-columns:1fr;}
+  .db-table th:nth-child(4),.db-table td:nth-child(4),
+  .db-table th:nth-child(6),.db-table td:nth-child(6){display:none;}
 }
 </style>
 </head>
 <body>
 
-<!-- LANDING -->
+<div class="halftone-bg"></div>
+<div class="grid-overlay"></div>
+
+<!-- ===== LANDING ===== -->
 <div id="landing">
-  <div class="landing-bg">
-    <div class="grid-lines"></div>
-  </div>
+  <div class="landing-noise"></div>
+  <div class="landing-grid-lines"></div>
+  <span class="landing-corner corner-tl">SYS:INIT // v1.0</span>
+  <span class="landing-corner corner-tr">GARXVOID.ARCHIVE</span>
+  <span class="landing-corner corner-bl" id="lc-bl">LOC:DATABASE</span>
+  <span class="landing-corner corner-br">PROMPT.COLLECTION</span>
   <div class="landing-content">
-    <div class="landing-eyebrow">by GARXVOID</div>
-    <div class="landing-title">KUMPULAN<br><span>PROMPT</span></div>
-    <div class="landing-sub">// prompt archive system v1.0</div>
-    <button class="enter-btn" onclick="enterApp()">ENTER</button>
+    <div class="landing-eyebrow">[ Archive / Image Generation Prompts ]</div>
+    <div class="landing-title" data-text="KUMPULAN">KUMPULAN</div>
+    <div class="landing-title" data-text="PROMPT">PROMPT</div>
+    <div class="landing-sub">by GARXVOID — Curated Generation Library</div>
+    <div class="landing-divider"></div>
+    <button class="btn-enter" onclick="enterApp()">
+      <span>[ ENTER DATABASE ]</span>
+    </button>
   </div>
 </div>
 
-<!-- APP -->
+<!-- ===== APP ===== -->
 <div id="app">
-  <header>
-    <div class="header-brand">GARX<span>VOID</span> <span style="color:var(--muted);font-size:11px;font-weight:400">// KUMPULAN PROMPT</span></div>
-    <div class="header-actions">
-      <div class="search-bar">
-        <span>🔍</span>
-        <input type="text" id="search-input" placeholder="SEARCH PROMPTS..." oninput="filterPrompts()">
-      </div>
-      <button class="btn primary" onclick="openAddModal()">+ ADD PROMPT</button>
+  <header class="app-header">
+    <div class="header-left" id="header-count">LOADING RECORDS...</div>
+    <div class="header-logo">KMPLN <span>///</span> PRMPT</div>
+    <div class="header-right">
+      <div class="status-dot" id="status-dot" style="background:#555;box-shadow:none;"></div>
+      <div class="status-text" id="status-text">OFFLINE</div>
     </div>
   </header>
 
-  <div class="container">
-    <!-- Config notice -->
-    <div class="config-notice" id="config-notice" style="display:none">
-      <strong>⚙ SETUP REQUIRED</strong><br>
-      Edit the <code>SCRIPT_URL</code> variable at the top of this file with your Google Apps Script Web App URL.
-      See the <code>GOOGLE_APPS_SCRIPT.gs</code> file for the backend code to deploy.
-      Once configured, reload the page.
+  <div class="toolbar">
+    <div class="search-box">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="search-input" placeholder="SEARCH PROMPTS..." oninput="filterPrompts()"/>
     </div>
+    <div class="filter-tags">
+      <button class="filter-tag active" onclick="setFilter('ALL',this)">ALL</button>
+      <button class="filter-tag" onclick="setFilter('GEMINI',this)">GEMINI</button>
+      <button class="filter-tag" onclick="setFilter('SORA',this)">SORA</button>
+      <button class="filter-tag" onclick="setFilter('WHISK',this)">WHISK</button>
+      <button class="filter-tag" onclick="setFilter('FLOW',this)">FLOW</button>
+      <button class="filter-tag" onclick="setFilter('OTHER',this)">OTHER</button>
+    </div>
+    <button class="btn-add" onclick="openAddModal()">+ ADD PROMPT</button>
+  </div>
 
-    <div class="stats-bar">
-      <div class="stat">
-        <div class="stat-val" id="stat-total">0</div>
-        <div class="stat-label">Total Prompts</div>
-      </div>
-      <div class="stat">
-        <div class="stat-val" id="stat-generators">0</div>
-        <div class="stat-label">Generators Used</div>
-      </div>
-      <div class="stat">
-        <div class="stat-val" id="stat-images">0</div>
-        <div class="stat-label">Images Stored</div>
+  <div class="stats-bar">
+    TOTAL: <span id="stat-total">—</span> &nbsp;|&nbsp;
+    FILTERED: <span id="stat-filtered">—</span> &nbsp;|&nbsp;
+    LAST UPDATED: <span id="stat-updated">—</span>
+  </div>
+
+  <div class="db-section">
+    <div id="loading-state" class="loading-state">
+      <div class="loading-bar"><div class="loading-bar-inner"></div></div>
+      <div class="loading-text">FETCHING DATABASE...</div>
+    </div>
+    <div id="table-wrap" style="display:none;">
+      <table class="db-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>DATE</th>
+            <th>TITLE</th>
+            <th>PROMPT</th>
+            <th>TOOLS</th>
+            <th>IMAGES</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+      <div id="empty-state" class="empty-state" style="display:none;">
+        <span class="es-label">NO RECORDS</span>
+        <p>DATABASE IS EMPTY — ADD YOUR FIRST PROMPT</p>
       </div>
     </div>
-
-    <div id="loading-state">
-      <div class="loader"></div>
-      LOADING DATA...
-    </div>
-
-    <div class="prompt-grid" id="prompt-grid"></div>
   </div>
 </div>
 
-<!-- DETAIL MODAL -->
-<div class="modal-overlay" id="detail-modal">
-  <div class="modal">
-    <div class="modal-close">
-      <button onclick="closeDetailModal()">✕</button>
-    </div>
-    <div class="modal-body" id="detail-content"></div>
-  </div>
-</div>
-
-<!-- ADD MODAL -->
-<div class="modal-overlay" id="add-modal">
-  <div class="modal">
-    <div class="modal-close">
-      <span style="font-family:'Syne',sans-serif;font-weight:900;font-size:14px;margin-right:auto;padding-left:4px">ADD NEW PROMPT</span>
-      <button onclick="closeAddModal()">✕</button>
+<!-- ===== DETAIL MODAL ===== -->
+<div class="overlay" id="detail-overlay" onclick="handleOverlayClick(event,'detail-overlay')">
+  <div class="modal" id="detail-modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="dm-title">—</div>
+        <div class="modal-meta" id="dm-meta">—</div>
+      </div>
+      <button class="btn-close" onclick="closeOverlay('detail-overlay')">✕</button>
     </div>
     <div class="modal-body">
-      <div class="form-group">
-        <label class="form-label">TITLE / NAME</label>
-        <input type="text" class="form-input" id="f-name" placeholder="e.g. Cyberpunk Portrait v3">
-      </div>
-      <div class="form-group">
-        <label class="form-label">GENERATOR(S)</label>
-        <div id="gen-selected" class="generator-row"></div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
-          <span class="gen-pill" onclick="toggleGen('Flow')">Flow</span>
-          <span class="gen-pill" onclick="toggleGen('Sora')">Sora</span>
-          <span class="gen-pill" onclick="toggleGen('Gemini')">Gemini</span>
-          <span class="gen-pill" onclick="toggleGen('Whisk')">Whisk</span>
+      <div class="detail-prompt-block">
+        <div class="detail-prompt-label">
+          <span>// PROMPT</span>
+          <button class="btn-copy" id="copy-btn" onclick="copyPrompt()">COPY</button>
         </div>
-        <div style="display:flex;gap:8px">
-          <input type="text" class="form-input" id="custom-gen-input" placeholder="Other generator name..." style="flex:1">
-          <button class="btn" onclick="addCustomGen()">ADD</button>
+        <div class="detail-prompt-text" id="dm-prompt">—</div>
+      </div>
+      <div class="detail-grid">
+        <div>
+          <div class="detail-section-label">// GENERATION TOOLS</div>
+          <div class="detail-tools-list" id="dm-tools"></div>
+        </div>
+        <div>
+          <div class="detail-section-label">// REFERENCE IMAGES</div>
+          <div class="detail-images" id="dm-ref-images"></div>
         </div>
       </div>
-      <div class="form-group">
-        <label class="form-label">PROMPT</label>
-        <textarea class="form-textarea" id="f-prompt" placeholder="Enter your prompt here..."></textarea>
+      <div>
+        <div class="detail-section-label">// OUTPUT RESULTS</div>
+        <div class="detail-images" id="dm-out-images"></div>
       </div>
-      <!-- Image upload: originals -->
-      <div class="form-group">
-        <label class="form-label">ORIGINAL IMAGE(S)</label>
-        <div class="upload-zone" id="orig-zone" ondragover="handleDrag(event,'orig')" ondragleave="handleDragLeave('orig')" ondrop="handleDrop(event,'orig')">
-          <input type="file" id="orig-files" accept="image/*" multiple onchange="handleFiles(event,'orig')">
-          <div class="upload-zone-icon">📁</div>
-          <div class="upload-zone-text">DROP OR CLICK TO UPLOAD<br><span style="color:var(--muted);font-size:10px">PNG, JPG, WEBP — multiple supported</span></div>
-        </div>
-        <div class="preview-list" id="orig-preview"></div>
-      </div>
-      <!-- Image upload: results -->
-      <div class="form-group">
-        <label class="form-label">RESULT IMAGE(S)</label>
-        <div class="upload-zone" id="res-zone" ondragover="handleDrag(event,'res')" ondragleave="handleDragLeave('res')" ondrop="handleDrop(event,'res')">
-          <input type="file" id="res-files" accept="image/*" multiple onchange="handleFiles(event,'res')">
-          <div class="upload-zone-icon">🖼</div>
-          <div class="upload-zone-text">DROP OR CLICK TO UPLOAD<br><span style="color:var(--muted);font-size:10px">PNG, JPG, WEBP — multiple supported</span></div>
-        </div>
-        <div class="preview-list" id="res-preview"></div>
-      </div>
-
-      <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:24px">
-        <button class="btn" onclick="closeAddModal()">CANCEL</button>
-        <button class="btn primary" onclick="submitPrompt()" id="submit-btn">SAVE PROMPT</button>
-      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-edit" onclick="openEditFromDetail()">EDIT</button>
+      <button class="btn-delete" onclick="openDeleteConfirm()">DELETE</button>
     </div>
   </div>
 </div>
 
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
-  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-  <button class="lb-nav lb-prev" onclick="lbNav(-1);event.stopPropagation()">‹</button>
-  <img id="lb-img" src="" alt="">
-  <button class="lb-nav lb-next" onclick="lbNav(1);event.stopPropagation()">›</button>
+<!-- ===== ADD/EDIT MODAL ===== -->
+<div class="overlay" id="form-overlay" onclick="handleOverlayClick(event,'form-overlay')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="form-modal-title">ADD PROMPT</div>
+      <button class="btn-close" onclick="closeOverlay('form-overlay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label class="form-label">// TITLE *</label>
+        <input class="form-input" id="f-title" type="text" placeholder="Enter prompt title..."/>
+      </div>
+      <div class="form-row">
+        <label class="form-label">// PROMPT *</label>
+        <textarea class="form-textarea" id="f-prompt" placeholder="Enter the full image generation prompt..."></textarea>
+      </div>
+      <div class="form-row">
+        <label class="form-label">// GENERATION TOOLS</label>
+        <div class="tool-checkboxes">
+          <div class="tool-checkbox"><input type="checkbox" id="t-gemini" value="GEMINI"/><label for="t-gemini">Gemini</label></div>
+          <div class="tool-checkbox"><input type="checkbox" id="t-sora" value="SORA"/><label for="t-sora">Sora</label></div>
+          <div class="tool-checkbox"><input type="checkbox" id="t-whisk" value="WHISK"/><label for="t-whisk">Whisk</label></div>
+          <div class="tool-checkbox"><input type="checkbox" id="t-flow" value="FLOW"/><label for="t-flow">Flow</label></div>
+          <div class="tool-checkbox"><input type="checkbox" id="t-other" value="OTHER" onchange="toggleOtherInput()"/><label for="t-other">Other</label></div>
+        </div>
+        <div class="tool-other-input" id="other-input-wrap" style="display:none;">
+          <input class="form-input" id="t-other-text" type="text" placeholder="Specify tool name..."/>
+        </div>
+      </div>
+      <div class="form-section-title">// IMAGES</div>
+      <div class="images-grid">
+        <div class="form-row">
+          <label class="form-label">REFERENCE IMAGES (URLs)</label>
+          <div class="url-fields" id="ref-url-fields"></div>
+          <button class="btn-add-url" onclick="addUrlField('ref-url-fields')">+ ADD URL</button>
+        </div>
+        <div class="form-row">
+          <label class="form-label">OUTPUT RESULTS (URLs)</label>
+          <div class="url-fields" id="out-url-fields"></div>
+          <button class="btn-add-url" onclick="addUrlField('out-url-fields')">+ ADD URL</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeOverlay('form-overlay')">CANCEL</button>
+      <button class="btn-submit" id="form-submit-btn" onclick="submitForm()">SAVE PROMPT</button>
+    </div>
+  </div>
 </div>
 
-<!-- TOAST -->
+<!-- ===== DELETE CONFIRM ===== -->
+<div class="overlay" id="confirm-overlay" onclick="handleOverlayClick(event,'confirm-overlay')">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-header">
+      <div class="modal-title" style="color:#ff2020;">CONFIRM DELETE</div>
+      <button class="btn-close" onclick="closeOverlay('confirm-overlay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="confirm-msg">
+        Are you sure you want to delete<br/>
+        <strong id="confirm-title-text">—</strong>?<br/><br/>
+        This action cannot be undone.
+      </p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeOverlay('confirm-overlay')">CANCEL</button>
+      <button class="btn-delete" onclick="confirmDelete()">DELETE</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LIGHTBOX ===== -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt=""/>
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+</div>
+
+<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
 // ============================================================
-// ⚙ CONFIG
+// CONFIG — replace with your deployed Apps Script URL
 // ============================================================
-const SCRIPT_URL  = 'https://script.google.com/macros/s/AKfycbwXVt1f41oHNm855s9iwzKwCuJzxIw9LGEuxf1zVf9WDct-NsqBBIKOBR02qXfhIx8/exec';
-const JSON_FILE_ID = '1CzTyUGomGDX7fLsphQ6_SQZF8bm2czbJ'; // from initialSetup() logs
-// ============================================================
+const APPS_SCRIPT_URL = "https://script.google.com/macros/library/d/1_vopS5qfiTi0X5azuSEybvHt56csxl2WQvdmnMlTFqGxVGEw2mA0vrEF/2";
 
+// ============================================================
+// STATE
+// ============================================================
 let allPrompts = [];
 let filteredPrompts = [];
-let selectedGens = [];
-let origFiles = [];
-let resFiles = [];
-let lbImages = [];
-let lbIndex = 0;
+let currentFilter = "ALL";
+let currentPrompt = null; // for detail/edit/delete
+let editMode = false;
+let lastUpdated = null;
 
-// ===== LANDING =====
+// ============================================================
+// LANDING
+// ============================================================
 function enterApp() {
-  document.getElementById('landing').classList.add('slide-up');
-  document.getElementById('app').classList.add('visible');
-  setTimeout(loadData, 600);
+  const landing = document.getElementById("landing");
+  const app = document.getElementById("app");
+  landing.classList.add("exiting");
+  app.classList.add("visible");
+  setTimeout(() => { landing.style.display = "none"; }, 900);
+  loadPrompts();
 }
 
-// ===== TOAST =====
-function toast(msg, type = '') {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = 'toast show' + (type ? ' ' + type : '');
-  setTimeout(() => el.className = 'toast', 3000);
-}
+// Animate corner counter on landing
+let lcCount = 0;
+setInterval(() => {
+  lcCount++;
+  document.getElementById("lc-bl").textContent = "REC:" + String(lcCount).padStart(4,"0");
+}, 80);
 
-// ===== LOAD DATA =====
-async function loadData() {
-  if (!JSON_FILE_ID || JSON_FILE_ID === '1CzTyUGomGDX7fLsphQ6_SQZF8bm2czbJ') {
-    document.getElementById('loading-state').style.display = 'none';
-    updateStats([]);
-    return;
+// ============================================================
+// API CALLS
+// ============================================================
+async function apiCall(payload) {
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === "https://script.google.com/macros/library/d/1_vopS5qfiTi0X5azuSEybvHt56csxl2WQvdmnMlTFqGxVGEw2mA0vrEF/2") {
+    return demoApi(payload);
   }
-  document.getElementById('config-notice').style.display = 'none';
+  // Apps Script GET with payload encoded as a single URL param — avoids all CORS preflight issues
+  const encoded = encodeURIComponent(JSON.stringify(payload));
+  const url = APPS_SCRIPT_URL + "?payload=" + encoded;
+  const res = await fetch(url, { redirect: "follow" });
+  return res.json();
+}
+
+// ---- DEMO MODE (in-memory) ----
+let demoStore = [];
+let demoSeq = 1;
+function demoApi(p) {
+  switch (p.action) {
+    case "getAll": return { prompts: JSON.parse(JSON.stringify(demoStore)) };
+    case "add": {
+      const id = "demo-" + demoSeq++;
+      const date = new Date().toISOString().slice(0,19).replace("T"," ");
+      demoStore.push({ id, date, title:p.title, prompt:p.prompt, tools:p.tools||[], refImages:p.refImages||[], outputImages:p.outputImages||[] });
+      return { success:true, id, date };
+    }
+    case "update": {
+      const idx = demoStore.findIndex(x=>x.id===p.id);
+      if (idx===-1) return { error:"not found" };
+      demoStore[idx] = { ...demoStore[idx], title:p.title, prompt:p.prompt, tools:p.tools||[], refImages:p.refImages||[], outputImages:p.outputImages||[] };
+      return { success:true };
+    }
+    case "delete": {
+      const idx = demoStore.findIndex(x=>x.id===p.id);
+      if (idx===-1) return { error:"not found" };
+      demoStore.splice(idx,1);
+      return { success:true };
+    }
+  }
+}
+
+// ============================================================
+// LOAD PROMPTS
+// ============================================================
+async function loadPrompts() {
+  setStatus("SYNCING","#ff0");
   try {
-    // Fetch the static JSON file from Google Drive — no CORS/CSP issues
-    const url = 'https://drive.google.com/uc?export=download&id=' + JSON_FILE_ID;
-    const res = await fetch(url);
-    const data = await res.json();
+    const data = await apiCall({ action:"getAll" });
+    if (data.error) throw new Error(data.error);
     allPrompts = data.prompts || [];
-    filteredPrompts = [...allPrompts];
-    renderGrid(filteredPrompts);
-    updateStats(allPrompts);
-  } catch(e) {
-    document.getElementById('loading-state').innerHTML = '<div style="color:var(--accent2)">⚠ Failed to load data.json. Run initialSetup() in Apps Script and paste the JSON_FILE_ID into the HTML.</div>';
-    console.error(e);
+    lastUpdated = new Date();
+    setStatus("ONLINE","#0f0");
+    renderTable();
+    showToast("DATABASE SYNCED — " + allPrompts.length + " RECORDS","success");
+  } catch (e) {
+    setStatus("ERROR","#ff2020");
+    showToast("CONNECTION FAILED: " + e.message,"error");
+    document.getElementById("loading-state").style.display = "none";
+    document.getElementById("table-wrap").style.display = "block";
+    allPrompts = [];
+    renderTable();
   }
 }
 
-function updateStats(prompts) {
-  document.getElementById('stat-total').textContent = prompts.length;
-  const gens = new Set(prompts.flatMap(p => (p.generators || '').split(',')));
-  gens.delete('');
-  document.getElementById('stat-generators').textContent = gens.size;
-  const imgs = prompts.reduce((a, p) => {
-    const o = p.originals ? p.originals.split(',').filter(Boolean).length : 0;
-    const r = p.results ? p.results.split(',').filter(Boolean).length : 0;
-    return a + o + r;
-  }, 0);
-  document.getElementById('stat-images').textContent = imgs;
-}
+// ============================================================
+// RENDER TABLE
+// ============================================================
+function renderTable() {
+  const q = document.getElementById("search-input").value.toLowerCase();
+  filteredPrompts = allPrompts.filter(p => {
+    const matchFilter = currentFilter === "ALL" ||
+      p.tools.some(t => t.toUpperCase().includes(currentFilter));
+    const matchSearch = !q ||
+      p.title.toLowerCase().includes(q) ||
+      p.prompt.toLowerCase().includes(q) ||
+      p.tools.some(t => t.toLowerCase().includes(q));
+    return matchFilter && matchSearch;
+  });
 
-// ===== RENDER =====
-function renderGrid(prompts) {
-  document.getElementById('loading-state').style.display = 'none';
-  const grid = document.getElementById('prompt-grid');
-  if (!prompts.length) {
-    grid.innerHTML = '<div class="empty-state">// NO PROMPTS YET — ADD YOUR FIRST ONE</div>';
+  const tbody = document.getElementById("table-body");
+  tbody.innerHTML = "";
+
+  document.getElementById("loading-state").style.display = "none";
+  document.getElementById("table-wrap").style.display = "block";
+
+  document.getElementById("stat-total").textContent = allPrompts.length;
+  document.getElementById("stat-filtered").textContent = filteredPrompts.length;
+  document.getElementById("stat-updated").textContent = lastUpdated ? lastUpdated.toLocaleTimeString() : "—";
+  document.getElementById("header-count").textContent = allPrompts.length + " RECORDS IN DATABASE";
+
+  if (filteredPrompts.length === 0) {
+    document.getElementById("empty-state").style.display = "block";
     return;
   }
-  grid.innerHTML = prompts.map((p, i) => {
-    const thumb = getFirstImage(p);
-    const gens = (p.generators || '').split(',').filter(Boolean);
-    return `<div class="prompt-card" data-id="${p.id}">
-      <div class="card-thumb">
-        ${thumb ? `<img src="${thumb}" alt="" loading="lazy" data-fallback="1">` : '<span class="card-thumb-placeholder">NO IMAGE</span>'}
-      </div>
-      <button class="card-del" data-del="${p.id}">✕</button>
-      <div class="card-body">
-        <div class="card-num">#${String(p.number || (i+1)).padStart(3,'0')} · ${p.date || '—'}</div>
-        <div class="card-title">${escapeHtml(p.name || 'Untitled')}</div>
-        <div class="card-prompt-preview">${escapeHtml(p.prompt || '')}</div>
-        <div class="card-footer">
-          <div style="display:flex;gap:4px;flex-wrap:wrap">
-            ${gens.map(g => `<span class="tag tag-${g.toLowerCase().replace(/\s/g,'-')}">${escapeHtml(g)}</span>`).join('')}
-          </div>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-  // Attach fallback + click handlers after render
-  grid.querySelectorAll('img[data-fallback]').forEach(img => {
-    img.addEventListener('error', function() {
-      const thumb = this.closest('.card-thumb');
-      if (thumb) { const s = document.createElement('span'); s.className='card-thumb-placeholder'; s.textContent='NO PREVIEW'; thumb.innerHTML=''; thumb.appendChild(s); }
-    });
+  document.getElementById("empty-state").style.display = "none";
+
+  filteredPrompts.forEach((p, i) => {
+    const tr = document.createElement("tr");
+    tr.onclick = () => openDetail(p);
+
+    // Tools badges
+    const toolsHtml = p.tools.map(t => {
+      const cls = ["gemini","sora","whisk","flow"].includes(t.toLowerCase()) ? t.toLowerCase() : "other";
+      return `<span class="tool-badge ${cls}">${t}</span>`;
+    }).join("");
+
+    // Images preview
+    const allImgs = [...(p.refImages||[]), ...(p.outputImages||[])];
+    let imgsHtml = allImgs.slice(0,2).map(url =>
+      `<img class="img-thumb" src="${escHtml(url)}" onerror="this.style.display='none'" alt=""/>`
+    ).join("");
+    if (allImgs.length > 2) imgsHtml += `<div class="img-count">+${allImgs.length-2}</div>`;
+
+    tr.innerHTML = `
+      <td class="td-num">${String(i+1).padStart(3,"0")}</td>
+      <td class="td-date">${fmtDate(p.date)}</td>
+      <td class="td-title">${escHtml(p.title)}</td>
+      <td class="td-prompt">${escHtml(p.prompt)}</td>
+      <td><div class="td-tools">${toolsHtml || "<span style='color:#333;font-size:.55rem;font-family:var(--font-mono)'>—</span>"}</div></td>
+      <td><div class="td-images">${imgsHtml || "<span style='color:#333;font-size:.55rem;font-family:var(--font-mono)'>—</span>"}</div></td>
+    `;
+    tbody.appendChild(tr);
   });
 }
 
-function getFirstImage(p) {
-  const orig = (p.originals || '').split(',').filter(Boolean);
-  const res = (p.results || '').split(',').filter(Boolean);
-  return res[0] || orig[0] || '';
+// ============================================================
+// FILTER / SEARCH
+// ============================================================
+function setFilter(f, el) {
+  currentFilter = f;
+  document.querySelectorAll(".filter-tag").forEach(b => b.classList.remove("active"));
+  el.classList.add("active");
+  renderTable();
+}
+function filterPrompts() { renderTable(); }
+
+// ============================================================
+// DETAIL MODAL
+// ============================================================
+function openDetail(p) {
+  currentPrompt = p;
+  document.getElementById("dm-title").textContent = p.title;
+  document.getElementById("dm-meta").textContent =
+    "ID: " + p.id.slice(0,8) + "... | DATE: " + fmtDate(p.date);
+  document.getElementById("dm-prompt").textContent = p.prompt;
+
+  // Tools
+  const toolsEl = document.getElementById("dm-tools");
+  toolsEl.innerHTML = p.tools.length
+    ? p.tools.map(t => {
+        const cls = ["gemini","sora","whisk","flow"].includes(t.toLowerCase()) ? t.toLowerCase() : "other";
+        return `<span class="tool-badge ${cls}">${t}</span>`;
+      }).join("")
+    : "<span style='color:#444;font-family:var(--font-mono);font-size:.6rem'>NONE SPECIFIED</span>";
+
+  // Ref images
+  renderImageSet("dm-ref-images", p.refImages);
+  // Out images
+  renderImageSet("dm-out-images", p.outputImages);
+
+  // Reset copy btn
+  const cb = document.getElementById("copy-btn");
+  cb.textContent = "COPY";
+  cb.classList.remove("copied");
+
+  openOverlay("detail-overlay");
 }
 
-function filterPrompts() {
-  const q = document.getElementById('search-input').value.toLowerCase();
-  filteredPrompts = allPrompts.filter(p =>
-    (p.name || '').toLowerCase().includes(q) ||
-    (p.prompt || '').toLowerCase().includes(q) ||
-    (p.generators || '').toLowerCase().includes(q)
-  );
-  renderGrid(filteredPrompts);
-}
-
-// ===== DETAIL MODAL =====
-function openDetail(id) {
-  const p = allPrompts.find(x => x.id === id);
-  if (!p) return;
-  const gens = (p.generators || '').split(',').filter(Boolean);
-  const origs = (p.originals || '').split(',').filter(Boolean);
-  const results = (p.results || '').split(',').filter(Boolean);
-
-  let html = `
-    <div class="modal-header">
-      <div class="modal-num">#${String(p.number || '').padStart(3,'0')}</div>
-      <div class="modal-title">${escapeHtml(p.name || 'Untitled')}</div>
-      <div class="modal-meta">
-        ${gens.map(g => `<span class="tag tag-${g.toLowerCase().replace(/\s/g,'-')}">${escapeHtml(g)}</span>`).join('')}
-        <span class="modal-date">${p.date || '—'}</span>
-      </div>
-    </div>
-    <div class="modal-section">
-      <div class="modal-label">PROMPT</div>
-      <div class="modal-prompt-text">${escapeHtml(p.prompt || '')}</div>
-      <button class="btn copy-btn" data-copy="${id}">COPY PROMPT</button>
-    </div>`;
-
-  const allImgs = [...results.map(u => ({url:u,type:'result'})), ...origs.map(u => ({url:u,type:'original'}))];
-  if (origs.length || results.length) {
-    html += `<div class="modal-section"><div class="modal-label">IMAGES</div>`;
-    if (origs.length) {
-      html += `<div class="img-group"><div class="img-group-label">Originals (${origs.length})</div>
-        <div class="img-grid">${origs.map((url, i) =>
-          `<img src="${url}" loading="lazy" data-lb-index="${results.length + i}">`
-        ).join('')}</div></div>`;
-    }
-    if (results.length) {
-      html += `<div class="img-group"><div class="img-group-label">Results (${results.length})</div>
-        <div class="img-grid">${results.map((url, i) =>
-          `<img src="${url}" loading="lazy" data-lb-index="${i}">`
-        ).join('')}</div></div>`;
-    }
-    html += `</div>`;
+function renderImageSet(containerId, urls) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = "";
+  if (!urls || urls.length === 0) {
+    el.innerHTML = "<span style='color:#444;font-family:var(--font-mono);font-size:.6rem'>NO IMAGES</span>";
+    return;
   }
-
-  document.getElementById('detail-content').innerHTML = html;
-
-  // Store allImgs for lightbox access
-  document.getElementById('detail-content').dataset.allImgs = JSON.stringify(allImgs);
-
-  // Attach handlers after render
-  document.querySelectorAll('[data-copy]').forEach(btn => {
-    btn.addEventListener('click', () => copyPrompt(btn.dataset.copy));
+  urls.forEach(url => {
+    if (!url) return;
+    const img = document.createElement("img");
+    img.className = "detail-img";
+    img.src = url;
+    img.alt = "";
+    img.onerror = () => img.style.display = "none";
+    img.onclick = () => openLightbox(url);
+    el.appendChild(img);
   });
-  document.querySelectorAll('#detail-content img[data-lb-index]').forEach(img => {
-    img.addEventListener('click', () => {
-      const imgs = JSON.parse(document.getElementById('detail-content').dataset.allImgs || '[]');
-      openLightbox(imgs, parseInt(img.dataset.lbIndex));
-    });
-    img.addEventListener('error', function() { this.style.display='none'; });
+}
+
+function copyPrompt() {
+  const text = document.getElementById("dm-prompt").textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById("copy-btn");
+    btn.textContent = "COPIED!";
+    btn.classList.add("copied");
+    setTimeout(() => { btn.textContent = "COPY"; btn.classList.remove("copied"); }, 2000);
   });
-
-  document.getElementById('detail-modal').classList.add('open');
 }
 
-function closeDetailModal() {
-  document.getElementById('detail-modal').classList.remove('open');
-}
-
-function copyPrompt(id) {
-  const p = allPrompts.find(x => x.id === id);
-  if (p) {
-    navigator.clipboard.writeText(p.prompt || '').then(() => toast('PROMPT COPIED!'));
-  }
-}
-
-// ===== LIGHTBOX =====
-function openLightbox(images, index) {
-  lbImages = images;
-  lbIndex = index;
-  document.getElementById('lb-img').src = images[index].url;
-  document.getElementById('lightbox').classList.add('open');
-}
-function closeLightbox(e) {
-  if (!e || e.target === document.getElementById('lightbox') || e.target === document.querySelector('.lightbox-close'))
-    document.getElementById('lightbox').classList.remove('open');
-}
-function lbNav(dir) {
-  lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
-  document.getElementById('lb-img').src = lbImages[lbIndex].url;
-}
-document.addEventListener('keydown', e => {
-  if (!document.getElementById('lightbox').classList.contains('open')) return;
-  if (e.key === 'ArrowLeft') lbNav(-1);
-  if (e.key === 'ArrowRight') lbNav(1);
-  if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('open');
-});
-
-// ===== ADD MODAL =====
+// ============================================================
+// ADD/EDIT FORM
+// ============================================================
 function openAddModal() {
-  document.getElementById('add-modal').classList.add('open');
-}
-function closeAddModal() {
-  document.getElementById('add-modal').classList.remove('open');
-  resetForm();
-}
-function resetForm() {
-  document.getElementById('f-name').value = '';
-  document.getElementById('f-prompt').value = '';
-  selectedGens = [];
-  origFiles = []; resFiles = [];
-  document.getElementById('gen-selected').innerHTML = '';
-  document.getElementById('orig-preview').innerHTML = '';
-  document.getElementById('res-preview').innerHTML = '';
-  document.querySelectorAll('.gen-pill').forEach(p => p.classList.remove('selected'));
+  editMode = false;
+  currentPrompt = null;
+  document.getElementById("form-modal-title").textContent = "ADD NEW PROMPT";
+  document.getElementById("form-submit-btn").textContent = "SAVE PROMPT";
+  clearForm();
+  openOverlay("form-overlay");
 }
 
-// ===== GENERATORS =====
-function toggleGen(name) {
-  const idx = selectedGens.indexOf(name);
-  if (idx > -1) {
-    selectedGens.splice(idx, 1);
-  } else {
-    selectedGens.push(name);
+function openEditFromDetail() {
+  editMode = true;
+  closeOverlay("detail-overlay");
+  document.getElementById("form-modal-title").textContent = "EDIT PROMPT";
+  document.getElementById("form-submit-btn").textContent = "UPDATE PROMPT";
+  fillForm(currentPrompt);
+  openOverlay("form-overlay");
+}
+
+function clearForm() {
+  document.getElementById("f-title").value = "";
+  document.getElementById("f-prompt").value = "";
+  ["t-gemini","t-sora","t-whisk","t-flow","t-other"].forEach(id => {
+    document.getElementById(id).checked = false;
+  });
+  document.getElementById("t-other-text").value = "";
+  document.getElementById("other-input-wrap").style.display = "none";
+  // Reset URL fields
+  const refFields = document.getElementById("ref-url-fields");
+  const outFields = document.getElementById("out-url-fields");
+  refFields.innerHTML = "";
+  outFields.innerHTML = "";
+  addUrlField("ref-url-fields");
+  addUrlField("out-url-fields");
+}
+
+function fillForm(p) {
+  document.getElementById("f-title").value = p.title || "";
+  document.getElementById("f-prompt").value = p.prompt || "";
+
+  const knownTools = ["GEMINI","SORA","WHISK","FLOW"];
+  let hasOther = false;
+  let otherVal = "";
+
+  (p.tools||[]).forEach(t => {
+    const upper = t.toUpperCase();
+    if (knownTools.includes(upper)) {
+      document.getElementById("t-" + upper.toLowerCase()).checked = true;
+    } else {
+      hasOther = true;
+      otherVal = t;
+    }
+  });
+  if (hasOther) {
+    document.getElementById("t-other").checked = true;
+    document.getElementById("t-other-text").value = otherVal;
+    document.getElementById("other-input-wrap").style.display = "block";
   }
-  document.querySelectorAll('.gen-pill').forEach(p => {
-    if (p.textContent === name) p.classList.toggle('selected', selectedGens.includes(name));
-  });
-  renderSelectedGens();
-}
-function addCustomGen() {
-  const val = document.getElementById('custom-gen-input').value.trim();
-  if (!val) return;
-  if (!selectedGens.includes(val)) selectedGens.push(val);
-  document.getElementById('custom-gen-input').value = '';
-  renderSelectedGens();
-}
-function renderSelectedGens() {
-  const genContainer = document.getElementById('gen-selected');
-  genContainer.innerHTML = selectedGens.map(g =>
-    `<span class="gen-pill selected" style="font-size:10px" data-gen-name="${escapeHtml(g)}">${escapeHtml(g)} <span class="gen-pill-remove">×</span></span>`
-  ).join('');
-  genContainer.querySelectorAll('[data-gen-name]').forEach(el => {
-    el.querySelector('.gen-pill-remove').addEventListener('click', () => removeGen(el.dataset.genName));
-  });
-}
-function removeGen(name) {
-  selectedGens = selectedGens.filter(g => g !== name);
-  document.querySelectorAll('.gen-pill').forEach(p => {
-    if (p.textContent.trim() === name) p.classList.remove('selected');
-  });
-  renderSelectedGens();
+
+  // Ref images
+  const refFields = document.getElementById("ref-url-fields");
+  refFields.innerHTML = "";
+  const refImgs = (p.refImages||[]).filter(Boolean);
+  if (refImgs.length) refImgs.forEach(url => addUrlField("ref-url-fields", url));
+  else addUrlField("ref-url-fields");
+
+  // Out images
+  const outFields = document.getElementById("out-url-fields");
+  outFields.innerHTML = "";
+  const outImgs = (p.outputImages||[]).filter(Boolean);
+  if (outImgs.length) outImgs.forEach(url => addUrlField("out-url-fields", url));
+  else addUrlField("out-url-fields");
 }
 
-// ===== FILE UPLOAD =====
-function handleFiles(event, type) {
-  const files = Array.from(event.target.files);
-  if (type === 'orig') { origFiles = [...origFiles, ...files]; renderPreviews('orig'); }
-  else { resFiles = [...resFiles, ...files]; renderPreviews('res'); }
-}
-function handleDrag(event, type) {
-  event.preventDefault();
-  document.getElementById(type + '-zone').classList.add('drag-over');
-}
-function handleDragLeave(type) {
-  document.getElementById(type + '-zone').classList.remove('drag-over');
-}
-function handleDrop(event, type) {
-  event.preventDefault();
-  document.getElementById(type + '-zone').classList.remove('drag-over');
-  const files = Array.from(event.dataTransfer.files).filter(f => f.type.startsWith('image/'));
-  if (type === 'orig') { origFiles = [...origFiles, ...files]; renderPreviews('orig'); }
-  else { resFiles = [...resFiles, ...files]; renderPreviews('res'); }
-}
-function renderPreviews(type) {
-  const files = type === 'orig' ? origFiles : resFiles;
-  const container = document.getElementById(type + '-preview');
-  container.innerHTML = files.map((f, i) => {
-    const url = URL.createObjectURL(f);
-    return `<div class="preview-item" data-preview-index="${i}">
-      <img src="${url}" alt="">
-      <button class="preview-remove">×</button>
-    </div>`;
-  }).join('');
-  container.querySelectorAll('.preview-remove').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const idx = parseInt(btn.closest('[data-preview-index]').dataset.previewIndex);
-      removeFile(type, idx);
-    });
-  });
-}
-function removeFile(type, index) {
-  if (type === 'orig') origFiles.splice(index, 1);
-  else resFiles.splice(index, 1);
-  renderPreviews(type);
+function toggleOtherInput() {
+  const checked = document.getElementById("t-other").checked;
+  document.getElementById("other-input-wrap").style.display = checked ? "block" : "none";
 }
 
-// ===== FILE TO BASE64 =====
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result.split(',')[1]);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
+function addUrlField(containerId, value="") {
+  const container = document.getElementById(containerId);
+  const row = document.createElement("div");
+  row.className = "url-field-row";
+  row.innerHTML = `
+    <input class="form-input" type="url" placeholder="https://..." value="${escHtml(value)}"/>
+    <button class="btn-remove-url" onclick="removeUrlField(this)" title="Remove">−</button>
+  `;
+  container.appendChild(row);
 }
 
-// ===== SUBMIT =====
-async function submitPrompt() {
-  const name = document.getElementById('f-name').value.trim();
-  const prompt = document.getElementById('f-prompt').value.trim();
-  if (!name) { toast('TITLE IS REQUIRED', 'error'); return; }
-  if (!prompt) { toast('PROMPT IS REQUIRED', 'error'); return; }
+function removeUrlField(btn) {
+  const container = btn.parentElement.parentElement;
+  if (container.children.length <= 1) {
+    btn.previousElementSibling.value = "";
+    return;
+  }
+  btn.parentElement.remove();
+}
 
-  const btn = document.getElementById('submit-btn');
-  btn.textContent = 'SAVING...';
+function getUrlValues(containerId) {
+  return Array.from(document.querySelectorAll(`#${containerId} input`))
+    .map(i => i.value.trim())
+    .filter(Boolean);
+}
+
+async function submitForm() {
+  const title = document.getElementById("f-title").value.trim();
+  const prompt = document.getElementById("f-prompt").value.trim();
+  if (!title) { showToast("TITLE IS REQUIRED","error"); return; }
+  if (!prompt) { showToast("PROMPT IS REQUIRED","error"); return; }
+
+  // Collect tools
+  const knownIds = ["t-gemini","t-sora","t-whisk","t-flow"];
+  const tools = knownIds
+    .filter(id => document.getElementById(id).checked)
+    .map(id => document.getElementById(id).value);
+  if (document.getElementById("t-other").checked) {
+    const ov = document.getElementById("t-other-text").value.trim();
+    if (ov) tools.push(ov);
+  }
+
+  const refImages = getUrlValues("ref-url-fields");
+  const outputImages = getUrlValues("out-url-fields");
+
+  const btn = document.getElementById("form-submit-btn");
   btn.disabled = true;
+  btn.textContent = "SAVING...";
 
   try {
-    // Convert images to base64
-    const origData = await Promise.all(origFiles.map(async f => ({
-      name: f.name,
-      mimeType: f.type,
-      data: await fileToBase64(f)
-    })));
-    const resData = await Promise.all(resFiles.map(async f => ({
-      name: f.name,
-      mimeType: f.type,
-      data: await fileToBase64(f)
-    })));
-
-    const payload = {
-      action: 'addPrompt',
-      name,
-      prompt,
-      generators: selectedGens.join(','),
-      originals: origData,
-      results: resData
-    };
-
-    const response = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      redirect: 'follow',
-      body: JSON.stringify(payload)
-    });
-    const result = await response.json();
-    if (result.success) {
-      toast('PROMPT SAVED!');
-      closeAddModal();
-      loadData();
+    let result;
+    if (editMode && currentPrompt) {
+      result = await apiCall({ action:"update", id:currentPrompt.id, title, prompt, tools, refImages, outputImages });
     } else {
-      toast('SAVE FAILED: ' + (result.error || 'Unknown error'), 'error');
+      result = await apiCall({ action:"add", title, prompt, tools, refImages, outputImages });
     }
+    if (result.error) throw new Error(result.error);
+
+    closeOverlay("form-overlay");
+    showToast(editMode ? "PROMPT UPDATED" : "PROMPT ADDED","success");
+    await loadPrompts();
   } catch(e) {
-    toast('ERROR: ' + e.message, 'error');
-    console.error(e);
+    showToast("ERROR: " + e.message,"error");
   } finally {
-    btn.textContent = 'SAVE PROMPT';
     btn.disabled = false;
+    btn.textContent = editMode ? "UPDATE PROMPT" : "SAVE PROMPT";
   }
 }
 
-// ===== DELETE =====
-async function deletePrompt(id) {
-  if (!confirm('DELETE this prompt?')) return;
+// ============================================================
+// DELETE
+// ============================================================
+function openDeleteConfirm() {
+  document.getElementById("confirm-title-text").textContent = currentPrompt.title;
+  openOverlay("confirm-overlay");
+}
+
+async function confirmDelete() {
   try {
-    const response = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      redirect: 'follow',
-      body: JSON.stringify({ action: 'deletePrompt', id })
-    });
-    const result = await response.json();
-    if (result.success) {
-      toast('PROMPT DELETED');
-      loadData();
-    } else {
-      toast('DELETE FAILED', 'error');
-    }
+    const result = await apiCall({ action:"delete", id:currentPrompt.id });
+    if (result.error) throw new Error(result.error);
+    closeOverlay("confirm-overlay");
+    closeOverlay("detail-overlay");
+    showToast("PROMPT DELETED","success");
+    await loadPrompts();
   } catch(e) {
-    toast('ERROR: ' + e.message, 'error');
+    showToast("ERROR: " + e.message,"error");
   }
 }
 
-// ===== UTILS =====
-function escapeHtml(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+// ============================================================
+// OVERLAY HELPERS
+// ============================================================
+function openOverlay(id) {
+  document.getElementById(id).classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeOverlay(id) {
+  document.getElementById(id).classList.remove("open");
+  // Only restore scroll if no other overlay is open
+  if (!document.querySelector(".overlay.open")) {
+    document.body.style.overflow = "";
+  }
+}
+function handleOverlayClick(e, id) {
+  if (e.target === document.getElementById(id)) closeOverlay(id);
 }
 
-// Event delegation for prompt grid
-document.getElementById('prompt-grid').addEventListener('click', function(e) {
-  // Delete button
-  const delBtn = e.target.closest('[data-del]');
-  if (delBtn) { e.stopPropagation(); deletePrompt(delBtn.dataset.del); return; }
-  // Card click -> open detail
-  const card = e.target.closest('.prompt-card[data-id]');
-  if (card) openDetail(card.dataset.id);
-});
+// ============================================================
+// LIGHTBOX
+// ============================================================
+function openLightbox(src) {
+  document.getElementById("lightbox-img").src = src;
+  document.getElementById("lightbox").classList.add("open");
+}
+function closeLightbox() {
+  document.getElementById("lightbox").classList.remove("open");
+}
 
-// Close modals on overlay click
-document.getElementById('detail-modal').addEventListener('click', function(e) {
-  if (e.target === this) closeDetailModal();
-});
-document.getElementById('add-modal').addEventListener('click', function(e) {
-  if (e.target === this) closeAddModal();
+// ============================================================
+// STATUS
+// ============================================================
+function setStatus(text, color) {
+  const dot = document.getElementById("status-dot");
+  const txt = document.getElementById("status-text");
+  txt.textContent = text;
+  dot.style.background = color;
+  dot.style.boxShadow = "0 0 6px " + color;
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg, type="") {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show " + type;
+  setTimeout(() => { t.className = "toast"; }, 3000);
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+function escHtml(s) {
+  return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function fmtDate(s) {
+  if (!s) return "—";
+  return String(s).slice(0,10);
+}
+
+// ESC key to close overlays
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
+    const open = document.querySelector(".overlay.open");
+    if (open) closeOverlay(open.id);
+    if (document.getElementById("lightbox").classList.contains("open")) closeLightbox();
+  }
 });
 </script>
-
 </body>
 </html>
