@@ -597,7 +597,7 @@ body{
     <div class="landing-title" data-text="PROMPT">PROMPT</div>
     <div class="landing-sub">by GARXVOID — Curated Generation Library</div>
     <div class="landing-divider"></div>
-    <button class="btn-enter" onclick="enterApp()">
+    <button class="btn-enter" id="btn-enter">
       <span>[ ENTER DATABASE ]</span>
     </button>
   </div>
@@ -617,17 +617,17 @@ body{
   <div class="toolbar">
     <div class="search-box">
       <span class="search-icon">⌕</span>
-      <input type="text" id="search-input" placeholder="SEARCH PROMPTS..." oninput="filterPrompts()"/>
+      <input type="text" id="search-input" placeholder="SEARCH PROMPTS..." />
     </div>
     <div class="filter-tags">
-      <button class="filter-tag active" onclick="setFilter('ALL',this)">ALL</button>
-      <button class="filter-tag" onclick="setFilter('GEMINI',this)">GEMINI</button>
-      <button class="filter-tag" onclick="setFilter('SORA',this)">SORA</button>
-      <button class="filter-tag" onclick="setFilter('WHISK',this)">WHISK</button>
-      <button class="filter-tag" onclick="setFilter('FLOW',this)">FLOW</button>
-      <button class="filter-tag" onclick="setFilter('OTHER',this)">OTHER</button>
+      <button class="filter-tag active" data-filter="ALL">ALL</button>
+      <button class="filter-tag" data-filter="GEMINI">GEMINI</button>
+      <button class="filter-tag" data-filter="SORA">SORA</button>
+      <button class="filter-tag" data-filter="WHISK">WHISK</button>
+      <button class="filter-tag" data-filter="FLOW">FLOW</button>
+      <button class="filter-tag" data-filter="OTHER">OTHER</button>
     </div>
-    <button class="btn-add" onclick="openAddModal()">+ ADD PROMPT</button>
+    <button class="btn-add" id="btn-add-prompt">+ ADD PROMPT</button>
   </div>
 
   <div class="stats-bar">
@@ -664,20 +664,20 @@ body{
 </div>
 
 <!-- ===== DETAIL MODAL ===== -->
-<div class="overlay" id="detail-overlay" onclick="handleOverlayClick(event,'detail-overlay')">
+<div class="overlay" id="detail-overlay">
   <div class="modal" id="detail-modal">
     <div class="modal-header">
       <div>
         <div class="modal-title" id="dm-title">—</div>
         <div class="modal-meta" id="dm-meta">—</div>
       </div>
-      <button class="btn-close" onclick="closeOverlay('detail-overlay')">✕</button>
+      <button class="btn-close" data-close="detail-overlay">✕</button>
     </div>
     <div class="modal-body">
       <div class="detail-prompt-block">
         <div class="detail-prompt-label">
           <span>// PROMPT</span>
-          <button class="btn-copy" id="copy-btn" onclick="copyPrompt()">COPY</button>
+          <button class="btn-copy" id="copy-btn">COPY</button>
         </div>
         <div class="detail-prompt-text" id="dm-prompt">—</div>
       </div>
@@ -697,18 +697,18 @@ body{
       </div>
     </div>
     <div class="modal-actions">
-      <button class="btn-edit" onclick="openEditFromDetail()">EDIT</button>
-      <button class="btn-delete" onclick="openDeleteConfirm()">DELETE</button>
+      <button class="btn-edit" id="btn-edit-detail">EDIT</button>
+      <button class="btn-delete" id="btn-delete-detail">DELETE</button>
     </div>
   </div>
 </div>
 
 <!-- ===== ADD/EDIT MODAL ===== -->
-<div class="overlay" id="form-overlay" onclick="handleOverlayClick(event,'form-overlay')">
+<div class="overlay" id="form-overlay">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title" id="form-modal-title">ADD PROMPT</div>
-      <button class="btn-close" onclick="closeOverlay('form-overlay')">✕</button>
+      <button class="btn-close" data-close="form-overlay">✕</button>
     </div>
     <div class="modal-body">
       <div class="form-row">
@@ -726,7 +726,7 @@ body{
           <div class="tool-checkbox"><input type="checkbox" id="t-sora" value="SORA"/><label for="t-sora">Sora</label></div>
           <div class="tool-checkbox"><input type="checkbox" id="t-whisk" value="WHISK"/><label for="t-whisk">Whisk</label></div>
           <div class="tool-checkbox"><input type="checkbox" id="t-flow" value="FLOW"/><label for="t-flow">Flow</label></div>
-          <div class="tool-checkbox"><input type="checkbox" id="t-other" value="OTHER" onchange="toggleOtherInput()"/><label for="t-other">Other</label></div>
+          <div class="tool-checkbox"><input type="checkbox" id="t-other" value="OTHER"/><label for="t-other">Other</label></div>
         </div>
         <div class="tool-other-input" id="other-input-wrap" style="display:none;">
           <input class="form-input" id="t-other-text" type="text" placeholder="Specify tool name..."/>
@@ -737,28 +737,28 @@ body{
         <div class="form-row">
           <label class="form-label">REFERENCE IMAGES (URLs)</label>
           <div class="url-fields" id="ref-url-fields"></div>
-          <button class="btn-add-url" onclick="addUrlField('ref-url-fields')">+ ADD URL</button>
+          <button class="btn-add-url" data-add-url="ref-url-fields">+ ADD URL</button>
         </div>
         <div class="form-row">
           <label class="form-label">OUTPUT RESULTS (URLs)</label>
           <div class="url-fields" id="out-url-fields"></div>
-          <button class="btn-add-url" onclick="addUrlField('out-url-fields')">+ ADD URL</button>
+          <button class="btn-add-url" data-add-url="out-url-fields">+ ADD URL</button>
         </div>
       </div>
     </div>
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeOverlay('form-overlay')">CANCEL</button>
-      <button class="btn-submit" id="form-submit-btn" onclick="submitForm()">SAVE PROMPT</button>
+      <button class="btn-cancel" data-close="form-overlay">CANCEL</button>
+      <button class="btn-submit" id="form-submit-btn">SAVE PROMPT</button>
     </div>
   </div>
 </div>
 
 <!-- ===== DELETE CONFIRM ===== -->
-<div class="overlay" id="confirm-overlay" onclick="handleOverlayClick(event,'confirm-overlay')">
+<div class="overlay" id="confirm-overlay">
   <div class="modal" style="max-width:480px;">
     <div class="modal-header">
       <div class="modal-title" style="color:#ff2020;">CONFIRM DELETE</div>
-      <button class="btn-close" onclick="closeOverlay('confirm-overlay')">✕</button>
+      <button class="btn-close" data-close="confirm-overlay">✕</button>
     </div>
     <div class="modal-body">
       <p class="confirm-msg">
@@ -768,16 +768,16 @@ body{
       </p>
     </div>
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeOverlay('confirm-overlay')">CANCEL</button>
-      <button class="btn-delete" onclick="confirmDelete()">DELETE</button>
+      <button class="btn-cancel" data-close="confirm-overlay">CANCEL</button>
+      <button class="btn-delete" id="btn-confirm-delete">DELETE</button>
     </div>
   </div>
 </div>
 
 <!-- ===== LIGHTBOX ===== -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+<div class="lightbox" id="lightbox">
   <img id="lightbox-img" src="" alt=""/>
-  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-close" id="lightbox-close-btn">✕</button>
 </div>
 
 <!-- Toast -->
@@ -787,7 +787,7 @@ body{
 // ============================================================
 // CONFIG — replace with your deployed Apps Script URL
 // ============================================================
-const APPS_SCRIPT_URL = "https://script.google.com/macros/library/d/1_vopS5qfiTi0X5azuSEybvHt56csxl2WQvdmnMlTFqGxVGEw2mA0vrEF/2";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPuXRD8c-DPm9iAn8r3aoULExfD6FLb9D-Daah05RgwLQgRK9stqg5RgLt7F0yLxmr/exec";
 
 // ============================================================
 // STATE
@@ -821,14 +821,17 @@ setInterval(() => {
 // ============================================================
 // API CALLS
 // ============================================================
+// ── API call ──
 async function apiCall(payload) {
-  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === "https://script.google.com/macros/library/d/1_vopS5qfiTi0X5azuSEybvHt56csxl2WQvdmnMlTFqGxVGEw2mA0vrEF/2") {
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === "PASTE_YOUR_APPS_SCRIPT_URL_HERE") {
     return demoApi(payload);
   }
-  // Apps Script GET with payload encoded as a single URL param — avoids all CORS preflight issues
   const encoded = encodeURIComponent(JSON.stringify(payload));
   const url = APPS_SCRIPT_URL + "?payload=" + encoded;
-  const res = await fetch(url, { redirect: "follow" });
+  // credentials:'omit' is critical — without it the browser attaches
+  // cookies, which upgrades the request to a credentialed cross-origin
+  // request and blocks Google's redirect response on GitHub Pages (HTTPS).
+  const res = await fetch(url, { credentials: "omit" });
   return res.json();
 }
 
@@ -927,7 +930,7 @@ function renderTable() {
     // Images preview
     const allImgs = [...(p.refImages||[]), ...(p.outputImages||[])];
     let imgsHtml = allImgs.slice(0,2).map(url =>
-      `<img class="img-thumb" src="${escHtml(url)}" onerror="this.style.display='none'" alt=""/>`
+      `<img class="img-thumb" src="${escHtml(url)}" alt=""/>`
     ).join("");
     if (allImgs.length > 2) imgsHtml += `<div class="img-count">+${allImgs.length-2}</div>`;
 
@@ -1100,20 +1103,26 @@ function addUrlField(containerId, value="") {
   const container = document.getElementById(containerId);
   const row = document.createElement("div");
   row.className = "url-field-row";
-  row.innerHTML = `
-    <input class="form-input" type="url" placeholder="https://..." value="${escHtml(value)}"/>
-    <button class="btn-remove-url" onclick="removeUrlField(this)" title="Remove">−</button>
-  `;
-  container.appendChild(row);
-}
 
-function removeUrlField(btn) {
-  const container = btn.parentElement.parentElement;
-  if (container.children.length <= 1) {
-    btn.previousElementSibling.value = "";
-    return;
-  }
-  btn.parentElement.remove();
+  const input = document.createElement("input");
+  input.className = "form-input";
+  input.type = "url";
+  input.placeholder = "https://...";
+  if (value) input.value = value;
+
+  const btn = document.createElement("button");
+  btn.className = "btn-remove-url";
+  btn.type = "button";
+  btn.title = "Remove";
+  btn.textContent = "−";
+  btn.addEventListener("click", () => {
+    if (container.children.length <= 1) { input.value = ""; return; }
+    row.remove();
+  });
+
+  row.appendChild(input);
+  row.appendChild(btn);
+  container.appendChild(row);
 }
 
 function getUrlValues(containerId) {
@@ -1247,14 +1256,73 @@ function fmtDate(s) {
   return String(s).slice(0,10);
 }
 
-// ESC key to close overlays
-document.addEventListener("keydown", e => {
-  if (e.key === "Escape") {
+
+// ============================================================
+// EVENT WIRING — no inline handlers, all wired here
+// ============================================================
+document.addEventListener("DOMContentLoaded", () => {
+  // Landing
+  document.getElementById("btn-enter").addEventListener("click", enterApp);
+
+  // Search
+  document.getElementById("search-input").addEventListener("input", renderTable);
+
+  // Filter tags
+  document.querySelectorAll("[data-filter]").forEach(btn => {
+    btn.addEventListener("click", () => setFilter(btn.dataset.filter, btn));
+  });
+
+  // Add prompt button
+  document.getElementById("btn-add-prompt").addEventListener("click", openAddModal);
+
+  // All [data-close] buttons
+  document.querySelectorAll("[data-close]").forEach(btn => {
+    btn.addEventListener("click", () => closeOverlay(btn.dataset.close));
+  });
+
+  // Overlay backdrop clicks
+  ["detail-overlay","form-overlay","confirm-overlay"].forEach(id => {
+    document.getElementById(id).addEventListener("click", e => {
+      if (e.target === document.getElementById(id)) closeOverlay(id);
+    });
+  });
+
+  // Copy prompt
+  document.getElementById("copy-btn").addEventListener("click", copyPrompt);
+
+  // Detail panel edit/delete
+  document.getElementById("btn-edit-detail").addEventListener("click", openEditFromDetail);
+  document.getElementById("btn-delete-detail").addEventListener("click", openDeleteConfirm);
+
+  // Tool "other" toggle
+  document.getElementById("t-other").addEventListener("change", toggleOtherInput);
+
+  // Add URL buttons
+  document.querySelectorAll("[data-add-url]").forEach(btn => {
+    btn.addEventListener("click", () => addUrlField(btn.dataset.addUrl));
+  });
+
+  // Form submit
+  document.getElementById("form-submit-btn").addEventListener("click", submitForm);
+
+  // Confirm delete
+  document.getElementById("btn-confirm-delete").addEventListener("click", confirmDelete);
+
+  // Lightbox
+  document.getElementById("lightbox").addEventListener("click", e => {
+    if (e.target === document.getElementById("lightbox")) closeLightbox();
+  });
+  document.getElementById("lightbox-close-btn").addEventListener("click", closeLightbox);
+
+  // ESC key
+  document.addEventListener("keydown", e => {
+    if (e.key !== "Escape") return;
     const open = document.querySelector(".overlay.open");
     if (open) closeOverlay(open.id);
     if (document.getElementById("lightbox").classList.contains("open")) closeLightbox();
-  }
+  });
 });
+
 </script>
 </body>
 </html>
